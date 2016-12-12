@@ -46,7 +46,15 @@ var Engine = (function(global) {
          * our update function since it may be used for smooth animation.
          */
         update(dt);
-        render();
+
+        /* When the game is started it will go to the start screen and set go to true
+         * Once go is set to true the game screen will render
+         */
+        if(go){
+            render(); // Render the game
+        }else{
+            renderStartScreen(); // Render start screen
+        }
 
         /* Set our lastTime variable which is used to determine the time delta
          * for the next time this function is called.
@@ -81,6 +89,7 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         checkCollisions();
+        checkPickup();
     }
 
     /* This is called by the update function and loops through all of the
@@ -95,6 +104,47 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+        updateExtras();
+    }
+
+    /* Reset gem value status if the player is at starting position and all gems
+     * have been picked up
+     */
+    function updateExtras() {
+        if(gemCount === 3  && player.set){
+            gemList.forEach(function(gem) {
+                gem.reset();
+            });
+            gemCount = 0;
+        }
+    }
+
+    /* This function draws the score board for the game and updates
+     * the score as the game is being played. This function also
+     * draws the gems on the game board
+     */
+    var renderExtras = function (){
+        ctx.clearRect(0,0,505,49);
+        ctx.clearRect(0,588,505,30);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.clearRect(0, 0, 200, 50);
+        ctx.strokeRect(0, 0, 200, 50);
+        ctx.fillStyle = "black";
+        ctx.font = "20px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText("Score: "+player.score, 50, 30);
+
+        /* Loop through all of the objects within the gemList array and call
+         * the render function.
+         */
+        gemList.forEach(function(gem) {
+            if(!gem.status){
+                gem.render();
+            }
+        });
+
+
     }
 
     /* This function initially draws the "game level", it will then call
@@ -136,8 +186,34 @@ var Engine = (function(global) {
             }
         }
 
+        renderExtras();
+
         renderEntities();
     }
+
+    /* This function draws the start screen for the game
+     * The  player can press ENTER to start the game or
+     * The player can press SPACE to change the player
+     */
+    function renderStartScreen(){
+        var topLine = "Press Enter to Start!",
+        bottomLine = "Press Space to Change Player";
+        ctx.clearRect(0,0,505,606);
+        ctx.font = "25pt Impact";
+        ctx.textAlign = "center";
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 2;
+        ctx.fillStyle = "white";
+        ctx.strokeRect(0,0,505,606);
+        ctx.fillText(topLine, canvas.width/2, 100);
+        ctx.strokeText(topLine, canvas.width/2, 100);
+        ctx.fillText(bottomLine, canvas.width/2, canvas.height-200);
+        ctx.strokeText(bottomLine, canvas.width/2, canvas.height-200);
+        ctx.fillRect(200, canvas.height-190, 101, 171);
+        ctx.drawImage(Resources.get(charImages[space]), 200, canvas.height-190, 101, 171);
+    }
+
+
 
     /* This function is called by the render function and is called on each game
      * tick. Its purpose is to then call the render functions you have defined
@@ -160,6 +236,11 @@ var Engine = (function(global) {
      */
     function reset() {
         player.reset();
+        if(gemCount === 3){
+            gemList.forEach(function(gem) {
+                gem.reset();
+            });
+        }
     }
 
     /* This function detects the collision between the player and an enemy  */
@@ -173,6 +254,15 @@ var Engine = (function(global) {
         });
     }
 
+    /* Function checkPick checks if a gem has been picked up by the player */
+    function checkPickup(){
+        gemList.forEach(function(gem) {
+            if(!gem.status){
+                player.gemPickup(gem);
+            }
+        });
+    }
+
     /* Go ahead and load all of the images we know we're going to need to
      * draw our game level. Then set init as the callback method, so that when
      * all of these images are properly loaded our game will start.
@@ -182,7 +272,18 @@ var Engine = (function(global) {
         'images/water-block.png',
         'images/grass-block.png',
         'images/enemy-bug.png',
-        'images/char-boy.png'
+        'images/char-boy.png',
+        'images/char-cat-girl.png',
+        'images/char-horn-girl.png',
+        'images/char-pink-girl.png',
+        'images/char-princess-girl.png',
+        'images/Gem-Blue.png',
+        'images/Gem-Green.png',
+        'images/Gem-Orange.png',
+        'images/Heart.png',
+        'images/Key.png',
+        'images/Rock.png',
+        'images/Star.png'
     ]);
     Resources.onReady(init);
 
