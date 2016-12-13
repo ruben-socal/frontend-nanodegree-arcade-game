@@ -1,14 +1,14 @@
 var go = false, // Toggle between start screen and game
-    gemCount=0;
-var  charImages = [
+    gemCount = 0,
+    space = 0,
+    charImages = [
             'images/char-boy.png',
             'images/char-cat-girl.png',
             'images/char-horn-girl.png',
             'images/char-pink-girl.png',
             'images/char-princess-girl.png'
-];
+    ];
 
-var space = 0;
 // Enemies our player must avoid
 var Enemy = function(x,y) {
     // Variables applied to each of our instances go here,
@@ -60,6 +60,7 @@ var Player = function(x,y){
     this.height = 43;
     this.score = 0;
     this.set = false;
+    this.level = 1;
 };
 
 // Update the player's position, required method for game
@@ -71,6 +72,15 @@ Player.prototype.update = function() {
         this.y = 380;
         this.score += 5;
         this.set = true;
+    }
+    if(this.score > 499){
+        this.level = 2;
+    }else if(this.score > 999){
+        this.level = 3;
+    }else if(this.score > 1499){
+        this.level = 4;
+    }else if(this.score > 1999){
+        this.level = 5;
     }
 };
 
@@ -87,6 +97,11 @@ Player.prototype.handleInput = function(direction) {
    // y-axis is used by up, down keys
    if(direction === 'enter'){
         go = !go;
+        this.score = 0;
+        this.level = 1;
+        gemList.forEach(function(gem) {
+            gem.reset();
+        });
     }else if(direction === 'space'){
         if(space < charImages.length-1){
             space++;
