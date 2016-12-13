@@ -11,6 +11,7 @@ var go = false, // Toggle between start screen and game
 
 // Enemies our player must avoid
 var Enemy = function(x,y) {
+    'use strict';
     // Variables applied to each of our instances go here,
     // we've provided one for you to get started
     // The image/sprite for our enemies, this uses
@@ -27,6 +28,7 @@ var Enemy = function(x,y) {
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
 Enemy.prototype.update = function(dt) {
+    'use strict';
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
@@ -46,6 +48,7 @@ Enemy.prototype.update = function(dt) {
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
+    'use strict';
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -53,6 +56,7 @@ Enemy.prototype.render = function() {
 // This class requires an update(), render() and
 // a handleInput() method.
 var Player = function(x,y){
+    'use strict';
     this.sprite = charImages[space];
     this.x = x;
     this.y = y;
@@ -66,6 +70,7 @@ var Player = function(x,y){
 // Update the player's position, required method for game
 // only update position if player gas reached the water
 Player.prototype.update = function() {
+    'use strict';
     // currently used as won for player
     if(this.y === -35){
         this.x = 200;
@@ -86,6 +91,7 @@ Player.prototype.update = function() {
 
 // Draw the player on the screen, required method for game
 Player.prototype.render = function() {
+    'use strict';
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
@@ -93,9 +99,10 @@ Player.prototype.render = function() {
  * enter and space keys added to handle start screen and change character.
  */
 Player.prototype.handleInput = function(direction) {
+    'use strict';
    // x-axis is used by left, right keys
    // y-axis is used by up, down keys
-   if(direction === 'enter'){
+    if(direction === 'enter'){
         go = !go;
         this.score = 0;
         this.level = 1;
@@ -105,32 +112,30 @@ Player.prototype.handleInput = function(direction) {
     }else if(direction === 'space'){
         if(space < charImages.length-1){
             space++;
-            player.changeChar(charImages[space]);
+            this.changeChar(charImages[space]);
         }else{
             space = 0;
-            player.changeChar(charImages[space]);
+            this.changeChar(charImages[space]);
         }
     }else if(direction === 'left' && this.x > 0){
         this.x -= 100;
         this.set = false;
-   }
-   else if(direction === 'right' && this.x < 400){
+    }else if(direction === 'right' && this.x < 400){
         this.x += 100;
         this.set = false;
-   }
-   else if(direction === 'up' && this.y > 47){
+    }else if(direction === 'up' && this.y > 47){
         this.y -= 83;
         this.set = false;
-   }
-   else if(direction === 'down' && this.y < 300){
+    }else if(direction === 'down' && this.y < 300){
         this.y += 83;
         this.set = false;
-   }
+    }
 
 };
 
 // Function collision checks if a player collides with an enemy
 Player.prototype.collision = function(enemy) {
+    'use strict';
    // Axis-Aligned Bounding Box used to detect collision between rectangles
    if (enemy.x < this.x + this.width &&
        enemy.x + enemy.width > this.x &&
@@ -149,6 +154,7 @@ Player.prototype.collision = function(enemy) {
 
 // Function gemPickup checks if player pickups a gem
 Player.prototype.gemPickup = function(gem) {
+    'use strict';
    // Axis-Aligned Bounding Box used to detect collision between rectangles
    if (gem.x < this.x + this.width &&
        gem.x + gem.width > this.x &&
@@ -163,17 +169,20 @@ Player.prototype.gemPickup = function(gem) {
 
 //Reset player to begining position
 Player.prototype.reset = function(){
+    'use strict';
     this.x = 200;
     this.y = 380;
 };
 
 // Function changeChar will change the player character
 Player.prototype.changeChar = function(image){
+    'use strict';
     this.sprite = image;
 };
 
 /* Gem class used to create gems for the game */
 var Gem = function(x,y,image){
+    'use strict';
     this.sprite = image;
     this.x = x;
     this.y = y;
@@ -184,11 +193,13 @@ var Gem = function(x,y,image){
 
 /* Function render draws the gems on the game board */
 Gem.prototype.render = function(){
+    'use strict';
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
 //Reset gems on the game board
 Gem.prototype.reset = function(){
+    'use strict';
     this.status = false;
 };
 
@@ -208,6 +219,7 @@ var enemy1 = new Enemy(50, 225),
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+    'use strict';
     var allowedKeys = {
         13: 'enter',
         32: 'space',
