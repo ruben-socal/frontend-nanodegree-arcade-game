@@ -33,6 +33,7 @@ var Engine = (function(global) {
      * and handles properly calling the update and render methods.
      */
     function main() {
+        'use strict';
         /* Get our time delta information which is required if your game
          * requires smooth animation. Because everyone's computer processes
          * instructions at different speeds we need a constant value that
@@ -72,6 +73,7 @@ var Engine = (function(global) {
      * game loop.
      */
     function init() {
+        'use strict';
         reset();
         lastTime = Date.now();
         main();
@@ -87,6 +89,7 @@ var Engine = (function(global) {
      * on the entities themselves within your app.js file).
      */
     function update(dt) {
+        'use strict';
         updateEntities(dt);
         checkCollisions();
         checkPickup();
@@ -97,9 +100,11 @@ var Engine = (function(global) {
      * their update() methods. It will then call the update function for your
      * player object. These update methods should focus purely on updating
      * the data/properties related to the object. Do your drawing in your
-     * render methods.
+     * render methods. updateExtras function was added to handle extra features
+     * added to the game, like the gem object and updating their data/propeeties.
      */
     function updateEntities(dt) {
+        'use strict';
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
@@ -111,6 +116,7 @@ var Engine = (function(global) {
      * have been picked up
      */
     function updateExtras() {
+        'use strict';
         if(gemCount === 3  && player.set){
             gemList.forEach(function(gem) {
                 gem.reset();
@@ -123,7 +129,8 @@ var Engine = (function(global) {
      * the score and game level as the game is being played. This function also
      * draws the gems on the game board
      */
-    var renderExtras = function (){
+    function renderExtras(){
+        'use strict';
         // Render the scoreboard
         ctx.clearRect(0,0,505,49);
         ctx.clearRect(0,588,505,30);
@@ -166,6 +173,7 @@ var Engine = (function(global) {
      * they are just drawing the entire screen over and over.
      */
     function render() {
+        'use strict';
         /* This array holds the relative URL to the image used
          * for that particular row of the game level.
          */
@@ -208,6 +216,7 @@ var Engine = (function(global) {
      * The player can press SPACE to change the player
      */
     function renderStartScreen(){
+        'use strict';
         var topLine = "Press Enter to Start!",
         bottomLine = "Press Space to Change Player";
         ctx.clearRect(0,0,505,606);
@@ -237,6 +246,7 @@ var Engine = (function(global) {
      * on your enemy and player entities within app.js
      */
     function renderEntities() {
+        'use strict';
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
@@ -252,6 +262,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
+        'use strict';
         player.reset();
         if(gemCount === 3){
             gemList.forEach(function(gem) {
@@ -262,6 +273,7 @@ var Engine = (function(global) {
 
     /* This function detects the collision between the player and an enemy  */
     function checkCollisions(){
+        'use strict';
         var status = false;
         allEnemies.forEach(function(enemy) {
             status = player.collision(enemy);
@@ -273,6 +285,7 @@ var Engine = (function(global) {
 
     /* Function checkPickup checks if a gem has been picked up by the player */
     function checkPickup(){
+        'use strict';
         gemList.forEach(function(gem) {
             if(!gem.status){
                 player.gemPickup(gem);
