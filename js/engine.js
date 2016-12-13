@@ -119,11 +119,12 @@ var Engine = (function(global) {
         }
     }
 
-    /* This function draws the score board for the game and updates
-     * the score as the game is being played. This function also
+    /* This function draws the score board and level box for the game and updates
+     * the score and game level as the game is being played. This function also
      * draws the gems on the game board
      */
     var renderExtras = function (){
+        // Render the scoreboard
         ctx.clearRect(0,0,505,49);
         ctx.clearRect(0,588,505,30);
         ctx.strokeStyle = "black";
@@ -134,6 +135,17 @@ var Engine = (function(global) {
         ctx.font = "20px Arial";
         ctx.textAlign = "left";
         ctx.fillText("Score: "+player.score, 50, 30);
+
+        // Render game level box
+        ctx.strokeRect(305, 0, 200, 50);
+        ctx.font = "20px Arial";
+        ctx.textAlign = "left";
+        ctx.fillText("Level: "+player.level, 380, 30);
+
+        // Render the game footer "Press Enter to Exit or Press Space to Change Character"
+        ctx.fillStyle = "blue";
+        ctx.font = "18px Arial";
+        ctx.fillText("Press Enter to Exit or Press Space to Change Character", 20, 605);
 
         /* Loop through all of the objects within the gemList array and call
          * the render function.
@@ -199,16 +211,21 @@ var Engine = (function(global) {
         var topLine = "Press Enter to Start!",
         bottomLine = "Press Space to Change Player";
         ctx.clearRect(0,0,505,606);
+        ctx.fillStyle = "rgb(102, 163, 255)"; // light blue
+        ctx.fillRect(0,0,505,606);
+        ctx.strokeStyle = "black";
+        ctx.lineWidth = 3;
+        ctx.strokeRect(0,0,505,606);
         ctx.font = "25pt Impact";
         ctx.textAlign = "center";
         ctx.strokeStyle = "black";
         ctx.lineWidth = 2;
-        ctx.fillStyle = "white";
-        ctx.strokeRect(0,0,505,606);
+        ctx.fillStyle = "rgb(255, 255, 0)"; //yellow
         ctx.fillText(topLine, canvas.width/2, 100);
         ctx.strokeText(topLine, canvas.width/2, 100);
         ctx.fillText(bottomLine, canvas.width/2, canvas.height-200);
         ctx.strokeText(bottomLine, canvas.width/2, canvas.height-200);
+        ctx.fillStyle = "rgb(102, 163, 255)"; // light blue
         ctx.fillRect(200, canvas.height-190, 101, 171);
         ctx.drawImage(Resources.get(charImages[space]), 200, canvas.height-190, 101, 171);
     }
@@ -254,7 +271,7 @@ var Engine = (function(global) {
         });
     }
 
-    /* Function checkPick checks if a gem has been picked up by the player */
+    /* Function checkPickup checks if a gem has been picked up by the player */
     function checkPickup(){
         gemList.forEach(function(gem) {
             if(!gem.status){
