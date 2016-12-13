@@ -14,5 +14,5 @@ This is an arcade game where the player tries to cross the 3 lane road to reach 
 3. To win you have to reach the river while avoiding being hit by the ladybugs.
 4. If you get hit by a ladybug the player is reset to the begining position.
 5. If the player reaches the river, the player wins 5 points and is reset to the beginning position.
-6. If the player is able to pickup a gem, that is 10 points.
-7. Every 100 points a new level starts in the game.
+6. If the player is able to pickup a gem, the player gets 10 points.
+7. Every 500 points a new level starts in the game.
